@@ -1,48 +1,483 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الصفحة الرئيسية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
-        body { background-color: #f8fafc; color: #334155; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        /* Navbar */
-        nav { background: #ffffff; padding: 18px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-        .logo { font-size: 1.3rem; font-weight: 700; color: #6366f1; }
-        .nav-links a { text-decoration: none; color: #64748b; font-weight: 500; margin-right: 20px; transition: 0.2s; }
-        .nav-links a.active, .nav-links a:hover { color: #6366f1; font-weight: 700; }
 
-        /* Card Content */
-        .main-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .card { background: #ffffff; border-radius: 20px; padding: 50px 40px; width: 100%; max-width: 550px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
-        .badge { background: #eeef2a20; color: #6366f1; background-color: #e0e7ff; padding: 6px 16px; border-radius: 30px; font-size: 0.85rem; font-weight: 700; display: inline-block; margin-bottom: 20px; }
-        h1 { font-size: 2rem; color: #1e293b; margin-bottom: 12px; }
-        p { color: #64748b; font-size: 1.05rem; line-height: 1.8; margin-bottom: 30px; }
-        
-        .btn { display: inline-block; background: #6366f1; color: white; padding: 12px 30px; border-radius: 12px; text-decoration: none; font-weight: 700; transition: 0.2s; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25); }
-        .btn:hover { background: #4f46e5; transform: translateY(-2px); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>روُدا كافيه | الرئيسية</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Tahoma",sans-serif;
+}
+
+body{
+background:#f8f4ef;
+color:#333;
+transition: background 0.5s, color 0.5s;
+}
+
+/* Navbar */
+nav{
+background:#4e342e;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 60px;
+position:sticky;
+top:0;
+z-index: 1000;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:#FFD54F;
+}
+
+nav ul{
+display:flex;
+list-style:none;
+}
+
+nav ul li{
+margin-right:25px;
+}
+
+nav ul li a{
+text-decoration:none;
+color:white;
+font-size:18px;
+transition:.3s;
+}
+
+nav ul li a:hover{
+color:#FFD54F;
+}
+
+/* Hero */
+.hero{
+height:85vh;
+background-image:
+linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+url("https://images.unsplash.com/photo-1495474472287-4d71bcdd2085");
+background-size:cover;
+background-position:center;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:white;
+padding:20px;
+}
+
+.hero-content{
+max-width:700px;
+}
+
+.hero h1{
+font-size:55px;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:22px;
+line-height:1.8;
+margin-bottom:35px;
+}
+
+.hero a.btn{
+display: inline-block;
+background:#d4a762;
+color:white;
+padding:15px 35px;
+border:none;
+font-size:18px;
+border-radius:30px;
+cursor:pointer;
+transition:.3s;
+text-decoration: none;
+}
+
+.hero a.btn:hover{
+background:#b8863b;
+}
+
+/* Cards */
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+width:90%;
+margin:60px auto;
+}
+
+.card{
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 0 15px rgba(0,0,0,.12);
+transition:.4s;
+text-align:center;
+}
+
+.card:hover{
+transform:translateY(-10px);
+}
+
+.card span{
+font-size:45px;
+}
+
+.card h3{
+margin:20px 0;
+color:#4e342e;
+}
+
+.card p{
+line-height:1.8;
+}
+
+/* Drinks */
+.drinks{
+width:90%;
+margin:auto;
+padding:40px 0;
+}
+
+.drinks h2{
+text-align:center;
+font-size:38px;
+color:#4e342e;
+margin-bottom:40px;
+}
+
+.drink-box{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+}
+
+.drink{
+background:white;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 0 15px rgba(0,0,0,.12);
+transition:.4s;
+position: relative;
+}
+
+.drink:hover{
+transform:scale(1.04);
+}
+
+.drink img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+
+.badge-first {
+position: absolute;
+top: 10px;
+right: 10px;
+background: #e67e22;
+color: white;
+padding: 5px 12px;
+border-radius: 20px;
+font-size: 13px;
+font-weight: bold;
+}
+
+.drink-info{
+padding:20px;
+text-align:center;
+}
+
+.drink-info h3{
+color:#4e342e;
+margin-bottom:10px;
+}
+
+.price{
+font-size:20px;
+color:#c58a2b;
+font-weight:bold;
+margin-top:10px;
+}
+
+/* DTL Section */
+.dtl-demo {
+width: 90%;
+margin: 60px auto;
+background: white;
+padding: 30px;
+border-radius: 15px;
+box-shadow: 0 0 15px rgba(0,0,0,.12);
+border-right: 5px solid #d4a762;
+}
+
+.dtl-demo h2 {
+color: #4e342e;
+margin-bottom: 20px;
+text-align: center;
+}
+
+.dtl-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 20px;
+}
+
+.dtl-box {
+background: #f8f4ef;
+padding: 20px;
+border-radius: 10px;
+}
+
+.dtl-box h3 {
+color: #4e342e;
+margin-bottom: 10px;
+font-size: 18px;
+}
+
+.dtl-box p {
+margin-bottom: 8px;
+font-size: 16px;
+}
+
+/* Footer */
+footer{
+background:#4e342e;
+color:white;
+text-align:center;
+padding:30px;
+margin-top:60px;
+}
+
+footer p{
+margin:8px 0;
+}
+
+@media(max-width:900px){
+.cards,
+.drink-box,
+.dtl-grid{
+grid-template-columns:1fr;
+}
+
+nav{
+flex-direction:column;
+}
+
+nav ul{
+margin-top:15px;
+}
+
+.hero h1{
+font-size:38px;
+}
+
+.hero p{
+font-size:18px;
+}
+}
+</style>
+
+<!-- تطبيق التغير التلقائي للثيم بناءً على الوقت بـ DTL -->
+{% if theme == "night" %}
+<style>
+body { background: #1e1b18; color: #f0e6df; }
+.card, .drink, .dtl-demo { background: #2a2421; color: #f0e6df; box-shadow: 0 0 15px rgba(0,0,0,.5); }
+.dtl-box { background: #352e2a; color: #f0e6df; }
+.card h3, .drinks h2, .drink-info h3, .dtl-demo h2, .dtl-box h3 { color: #FFD54F; }
+</style>
+{% endif %}
+
 </head>
-<body>
-    <nav>
-        <div class="logo">✨ DjangoLab</div>
-        <div class="nav-links">
-            <a href="/" class="active">الرئيسية</a>
-            <a href="/about/">عن النظام</a>
-        </div>
-    </nav>
 
-    <div class="main-container">
-        <div class="card">
-            <span class="badge">مشروع هندسة البرمجيات</span>
-            <h1>أهلاً بك في النظام 👋</h1>
-            <p>تم تصميم وعرض هذه الصفحة باستخدام إطار العمل Django ونظام الـ Templates بنجاح.</p>
-            <a href="/about/" class="btn">الانتقال لصفحة من نحن 👈</a>
-        </div>
-    </div>
+<body>
+
+<nav>
+
+<div class="logo">☕ {{ cafe_name|title }}</div>
+
+<ul>
+
+<li><a href="{% url 'pages:home' %}">الرئيسية</a></li>
+
+<li><a href="{% url 'pages:about' %}">من نحن</a></li>
+
+<li><a href="#drinks">القائمة</a></li>
+
+<li><a href="{% url 'pages:about' %}#contact">تواصل معنا</a></li>
+
+</ul>
+
+</nav>
+
+<section class="hero">
+
+<div class="hero-content">
+
+<h1>مرحباً بكم في {{ cafe_name|upper }}</h1>
+
+<p>{{ description|capfirst }} - الفرع الرئيسي ({{ cafe_info.city }})</p>
+
+<a href="#drinks" class="btn">اكتشف قائمتنا</a>
+
+</div>
+
+</section>
+
+<section class="cards">
+
+<div class="card">
+
+<span>☕</span>
+
+<h3>قهوة مختصة</h3>
+
+<p>نستخدم أجود أنواع البن المحمص بعناية.</p>
+
+</div>
+
+<div class="card">
+
+<span>🍰</span>
+
+<h3>حلويات طازجة</h3>
+
+<p>تشكيلة يومية من الحلويات اللذيذة.</p>
+
+</div>
+
+<div class="card">
+
+<span>📶</span>
+
+<h3>واي فاي مجاني</h3>
+
+<p>استمتع بوقتك أثناء الدراسة أو العمل.</p>
+
+</div>
+
+<div class="card">
+
+<span>🎵</span>
+
+<h3>أجواء هادئة</h3>
+
+<p>موسيقى هادئة ومكان مريح للجميع.</p>
+
+</div>
+
+</section>
+
+<section class="dtl-demo">
+
+<h2>تطبيق مفاهيم المعمل (Django Template Language)</h2>
+
+<div class="dtl-grid">
+
+<div class="dtl-box">
+
+<h3>1. المتغيرات والفلاتر (Filters):</h3>
+
+<p><b>اسم الكافيه:</b> {{ cafe_name }}</p>
+
+<p><b>بأحرف كبيرة (upper):</b> {{ cafe_name|upper }}</p>
+
+<p><b>بأحرف صغيرة (lower):</b> {{ cafe_name|lower }}</p>
+
+<p><b>عنوان (title):</b> {{ cafe_name|title }}</p>
+
+<p><b>أول حرف كبير (capfirst):</b> {{ description|capfirst }}</p>
+
+</div>
+
+<div class="dtl-box">
+
+<h3>2. الشروط والوقت (if / elif / else):</h3>
+
+<p><b>الساعة الحالية (السيرفر):</b> {{ current_hour }}:00</p>
+
+<p><b>مظهر التطبيق التلقائي:</b> 
+{% if theme == "night" %}
+    <span style="color: #FFD54F; font-weight: bold;">🌙 الوضع الليلي (Dark Theme)</span>
+{% else %}
+    <span style="color: #d4a762; font-weight: bold;">☀️ الوضع النهاري (Light Theme)</span>
+{% endif %}
+</p>
+
+<p><b>حالة الكافيه الآن:</b> 
+{% if is_open %}
+    <span style="color: green; font-weight: bold;">🟢 مفتوح حالياً</span>
+{% elif branch_number == 1 %}
+    <span style="color: orange; font-weight: bold;">⚠️ خدمة التوصيل فقط</span>
+{% else %}
+    <span style="color: red; font-weight: bold;">🔴 مغلق</span>
+{% endif %}
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="drinks" id="drinks">
+
+<h2>القائمة (تطبيق forloop.counter المطلوبة في المعمل)</h2>
+
+<div class="drink-box">
+
+<!-- حلقة التكرار مع استخدام forloop.counter و forloop.first حسب الشريحة 18 -->
+{% for drink in drinks %}
+<div class="drink">
+
+{% if forloop.first %}
+    <span class="badge-first">الأكثر طلباً ⭐</span>
+{% endif %}
+
+<img src="{{ drink.image }}">
+
+<div class="drink-info">
+
+<!-- تطبيق forloop.counter لترقيم العناصر تلقائياً -->
+<h3>{{ forloop.counter }}. {{ drink.name|title }}</h3>
+
+<p>{{ drink.desc }}</p>
+
+<div class="price">{{ drink.price }} ريال</div>
+
+</div>
+
+</div>
+{% empty %}
+<p style="text-align: center; grid-column: span 4;">لا تتوفر مشروبات حالياً في القائمة.</p>
+{% endfor %}
+
+</div>
+
+</section>
+
+<footer>
+
+<h2>☕ {{ cafe_name|title }}</h2>
+
+<p>📍 {{ cafe_info.city }}</p>
+
+<p>© جميع الحقوق محفوظة 2026</p>
+
+</footer>
+
 </body>
+
 </html>
