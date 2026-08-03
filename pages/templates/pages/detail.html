@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item.name_ar }} | {{ item.name_en|title }}</title>
+    <link rel="stylesheet" href="{% static 'pages/css/style.css' %}">
+</head>
+<body class="{{ theme }}">
+
+    <nav>
+        <div class="nav-brand">☕ {{ cafe_name|default:"RODA CAFE"|upper }}</div>
+        <div>
+            <a href="{% url 'pages:home' %}">القائمة الرئيسية 📜</a>
+            <a href="{% url 'pages:about' %}">عن المقهى ℹ️</a>
+        </div>
+    </nav>
+
+    <div style="max-width: 800px; margin: 20px auto;">
+        
+        {% if item %}
+            <div class="card" style="padding: 30px;">
+                
+                <!-- تطبيق الفلاتر: upper, lower, title على الأسماء مباشرة -->
+                <h1 style="font-size: 32px;">{{ item.name_ar }}</h1>
+                <h3 style="color: #8d6e63; font-size: 20px; margin-bottom: 10px;">
+                    English Name: {{ item.name_en|title }} 
+                    <span style="font-size: 14px; opacity: 0.7;">(Code: {{ item.name_en|slice:":3"|upper }})</span>
+                </h3>
+
+                <p style="opacity: 0.7; font-size: 14px; margin-bottom: 15px;">رقم الصنف: #{{ item_id }}</p>
+                <hr style="opacity: 0.2; margin-bottom: 20px;">
+
+                <!-- تطبيق فلتر capfirst على الوصف -->
+                <p style="font-size: 18px; line-height: 1.6; margin-bottom: 15px;">
+                    <b>الوصف:</b> {{ item.details|capfirst }}
+                </p>
+
+                <!-- تطبيق فلتر truncatewords -->
+                <p style="font-size: 14px; color: #777; margin-bottom: 15px;">
+                    <b>نبذة مختصرة:</b> {{ item.details|truncatewords:4 }}
+                </p>
+
+                <p class="price-tag" style="font-size: 24px;">السعر: {{ item.price }} ريال يمني</p>
+
+                <!-- الشروط 1: if / elif / else -->
+                <p style="margin: 15px 0;">
+                    <b>حالة التوفر:</b> 
+                    {% if item.in_stock and item.price < 1000 %}
+                        <span class="badge badge-success">متوفر بسعر اقتصادي ممتاز</span>
+                    {% elif item.in_stock %}
+                        <span class="badge badge-success">متوفر حالياً في المقهى</span>
+                    {% else %}
+                        <span class="badge badge-danger">نفد مؤقتاً من المخزون</span>
+                    {% endif %}
+                </p>
+
+                <!-- الشروط 2: تقييم السعرات الحرارية -->
+                <p style="margin-bottom: 20px;">
+                    <b>السعرات الحرارية ({{ item.calories }} cal):</b>
+                    {% if item.calories < 150 %}
+                        <span style="color: green; font-weight: bold;">خفيف جداً وصحي 🥗</span>
+                    {% elif item.calories <= 450 %}
+                        <span style="color: orange; font-weight: bold;">متوسط السعرات الحرارية ⚖️</span>
+                    {% else %}
+                        <span style="color: red; font-weight: bold;">عالي السعرات 🔥</span>
+                    {% endif %}
+                </p>
+
+                <!-- الحلقات 1 (for loop مع forloop.counter و forloop.first و empty) -->
+                <h3 style="margin-top: 20px;">🥣 المكونات والمحتويات:</h3>
+                <ul style="margin-right: 25px; margin-top: 10px; line-height: 1.8;">
+                    {% for ingredient in item.ingredients %}
+                        <li>
+                            المكون {{ forloop.counter }}: <b>{{ ingredient }}</b>
+                            {% if forloop.first %}
+                                <span class="badge badge-star">المكون الأساسي ⭐</span>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li>لا توجد مكونات مسجلة لهذا الصنف.</li>
+                    {% endfor %}
+                </ul>
+
+                <!-- استخدام فلتر length على إجمالي المنيو وفلتر default على الكوبون -->
+                <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.05); border-radius: 10px; font-size: 14px;">
+                    <p><b>إجمالي الأصناف المتاحة بالمقهى:</b> {{ all_items|length }} أصناف</p>
+                    <p><b>كوبون الخصم المتاح:</b> {{ discount_code|default:"لا يوجد خصم حالياً" }}</p>
+                </div>
+
+                <!-- الحلقات 2: أصناف مقترحة من نفس القسم -->
+                {% if related_items %}
+                    <h3 style="margin-top: 25px;">💡 أصناف مقترحة من نفس القسم:</h3>
+                    <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                        {% for rel in related_items %}
+                            <a href="{% url 'pages:detail' rel.id %}" class="btn" style="font-size: 14px; margin-top: 5px;">
+                                {{ rel.name_ar }} ({{ rel.price }} ريال)
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <br>
+                <a href="{% url 'pages:home' %}" class="btn">⬅️ العودة للقائمة الرئيسية</a>
+            </div>
+        {% else %}
+            <div class="card" style="text-align: center; padding: 40px;">
+                <h2 style="color: #c62828;">⚠️ عذراً، الصنف المطلوب غير موجود!</h2>
+                <br>
+                <a href="{% url 'pages:home' %}" class="btn">العودة للرئيسية</a>
+            </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>

@@ -1,325 +1,46 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>من نحن | {{ title|title }}</title>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:"Tahoma",sans-serif;
-}
-
-body{
-background:#f8f4ef;
-color:#333;
-transition: background 0.5s, color 0.5s;
-}
-
-/* Navbar */
-nav{
-background:#4e342e;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:18px 60px;
-position:sticky;
-top:0;
-z-index: 1000;
-}
-
-.logo{
-font-size:28px;
-font-weight:bold;
-color:#FFD54F;
-}
-
-nav ul{
-display:flex;
-list-style:none;
-}
-
-nav ul li{
-margin-right:25px;
-}
-
-nav ul li a{
-text-decoration:none;
-color:white;
-font-size:18px;
-transition:.3s;
-}
-
-nav ul li a:hover{
-color:#FFD54F;
-}
-
-/* Header */
-.header{
-height:45vh;
-background-image:
-linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-url("https://images.unsplash.com/photo-1509042239860-f550ce710b93");
-background-size:cover;
-background-position:center;
-display:flex;
-justify-content:center;
-align-items:center;
-text-align:center;
-color:white;
-}
-
-.header h1{
-font-size:55px;
-margin-bottom:20px;
-}
-
-.header p{
-font-size:22px;
-}
-
-/* Story */
-.story{
-width:90%;
-margin:60px auto;
-text-align:center;
-}
-
-.story h2{
-font-size:38px;
-color:#4e342e;
-margin-bottom:25px;
-}
-
-.story p{
-font-size:20px;
-line-height:2;
-max-width:900px;
-margin:auto;
-}
-
-/* Mission & Vision */
-.info{
-width:90%;
-margin:auto;
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:30px;
-}
-
-.box{
-background:white;
-padding:30px;
-border-radius:15px;
-box-shadow:0 0 15px rgba(0,0,0,.12);
-}
-
-.box h3{
-color:#4e342e;
-margin-bottom:15px;
-font-size:28px;
-}
-
-.box p{
-font-size:18px;
-line-height:1.9;
-}
-
-/* Contact Section */
-.contact{
-width:90%;
-margin:60px auto;
-background:white;
-padding:40px;
-border-radius:15px;
-box-shadow:0 0 15px rgba(0,0,0,.12);
-text-align:center;
-}
-
-.contact h2{
-font-size:36px;
-color:#4e342e;
-margin-bottom:30px;
-}
-
-.contact-details{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:20px;
-}
-
-.contact-item{
-font-size:18px;
-line-height:1.8;
-}
-
-.contact-item span{
-font-size:35px;
-display:block;
-margin-bottom:10px;
-}
-
-/* Footer */
-footer{
-background:#4e342e;
-color:white;
-text-align:center;
-padding:30px;
-margin-top:60px;
-}
-
-footer p{
-margin:8px 0;
-}
-
-@media(max-width:900px){
-.info, .contact-details{
-grid-template-columns:1fr;
-}
-}
-</style>
-
-<!-- تطبيق الثيم في صفحة عن الكافيه -->
-{% if theme == "night" %}
-<style>
-body { background: #1e1b18; color: #f0e6df; }
-.box, .contact { background: #2a2421; color: #f0e6df; box-shadow: 0 0 15px rgba(0,0,0,.5); }
-.story h2, .box h3, .contact h2 { color: #FFD54F; }
-</style>
-{% endif %}
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>من نحن | {{ title|title }}</title>
+    <link rel="stylesheet" href="{% static 'pages/css/style.css' %}">
 </head>
+<body class="{{ theme }}">
 
-<body>
+    <!-- القائمة العلوية -->
+    <nav>
+        <div class="nav-brand">☕ {{ title|upper }}</div>
+        <div>
+            <a href="{% url 'pages:home' %}">القائمة الرئيسية 📜</a>
+            <a href="{% url 'pages:about' %}">عن المقهى ℹ️</a>
+        </div>
+    </nav>
 
-<nav>
+    <!-- الهيدر -->
+    <div class="hero-header">
+        <h1>ℹ️ {{ title|title }}</h1>
+        <p>نقدم لكم أفضل تجربة للقهوة والمأكولات في مدينة إب</p>
+    </div>
 
-<div class="logo">☕ Roda Cafe</div>
+    <!-- كارت التفاصيل -->
+    <div style="max-width: 650px; margin: 0 auto;">
+        <div class="card" style="padding: 35px;">
+            <h2 style="text-align: center; margin-bottom: 15px;">معلومات المقهى ☕</h2>
+            <hr style="opacity: 0.2; margin-bottom: 25px;">
 
-<ul>
+            <div style="font-size: 18px; line-height: 2.2;">
+                <p><b>👩‍💼 إشراف وتطوير:</b> {{ manager }}</p>
+                <p><b>📞 رقم التواصل:</b> {{ phone }}</p>
+                <p><b>⏰ ساعات العمل:</b> {{ working_hours }}</p>
+                <p><b>📍 العنوان:</b> إب - اليمن</p>
+            </div>
 
-<li><a href="{% url 'pages:home' %}">الرئيسية</a></li>
-
-<li><a href="{% url 'pages:about' %}">من نحن</a></li>
-
-<li><a href="{% url 'pages:home' %}#drinks">القائمة</a></li>
-
-<li><a href="#contact">تواصل معنا</a></li>
-
-</ul>
-
-</nav>
-
-<section class="header">
-
-<div>
-
-<!-- استخدام الفلتر capfirst -->
-<h1>{{ title|capfirst }}</h1>
-
-<p>إدارة: {{ manager }}</p>
-
-</div>
-
-</section>
-
-<section class="story">
-
-<h2>قصتنا</h2>
-
-<p>
-بدأت فكرة روُدا كافيه لتوفير مكان يجمع بين جودة القهوة والأجواء الهادئة في مدينة إب.
-نسعى إلى أن يكون كل زائر جزءًا من عائلتنا، وأن يستمتع بتجربة مميزة في كل زيارة.
-</p>
-
-</section>
-
-<section class="info">
-
-<div class="box">
-
-<h3>🎯 رؤيتنا</h3>
-
-<p>
-أن يصبح روُدا كافيه الوجهة الأولى لعشاق القهوة من خلال الجودة والابتكار والخدمة المميزة.
-</p>
-
-</div>
-
-<div class="box">
-
-<h3>☕ رسالتنا</h3>
-
-<p>
-تقديم أفضل أنواع القهوة والحلويات في بيئة مريحة تناسب العائلات والطلاب ورواد الأعمال.
-</p>
-
-</div>
-
-</section>
-
-<!-- تطبيق الشرط if لإظهار أو إخفاء معلومات التواصل -->
-{% if show_contact %}
-<section class="contact" id="contact">
-
-<h2>تواصل معنا</h2>
-
-<div class="contact-details">
-
-<div class="contact-item">
-
-<span>📍</span>
-
-<h3>العنوان</h3>
-
-<p>إب - اليمن</p>
-
-</div>
-
-<div class="contact-item">
-
-<span>📞</span>
-
-<h3>الهاتف</h3>
-
-<p>{{ phone }}</p>
-
-</div>
-
-<div class="contact-item">
-
-<span>⏰</span>
-
-<h3>ساعات العمل</h3>
-
-<p>{{ working_hours }}</p>
-
-</div>
-
-</div>
-
-</section>
-{% else %}
-<section class="contact">
-    <h2>معلومات التواصل غير متاحة حالياً</h2>
-</section>
-{% endif %}
-
-<footer>
-
-<h2>☕ Roda Cafe</h2>
-
-<p>© 2026 جميع الحقوق محفوظة</p>
-
-</footer>
+            <br>
+            <a href="{% url 'pages:home' %}" class="btn">⬅️ العودة للقائمة الرئيسية</a>
+        </div>
+    </div>
 
 </body>
-
 </html>
