@@ -1,105 +1,46 @@
 from django.shortcuts import render
 from datetime import datetime
-
-# قائمة البيانات الشاملة (MENU_DATA) مع أسماء عربية وإنجليزية لكل صنف
-MENU_DATA = [
-    # ☕ قسم المشروبات
-    {
-        "id": 1, 
-        "category": "drinks", 
-        "name_ar": "شاي عدني خادر", 
-        "name_en": "adenese tea with milk", 
-        "price": 400, 
-        "calories": 120, 
-        "details": "شاي فاخر مطبوخ على النار الهادئة مع الحليب المكثف والبهارات العدنية الأصيلة", 
-        "in_stock": True, 
-        "ingredients": ["شاي ممتاز", "حليب مكثف", "هيل", "قرفة"]
-    },
-    {
-        "id": 2, 
-        "category": "drinks", 
-        "name_ar": "إسبريسو سينجل", 
-        "name_en": "espresso single shot", 
-        "price": 800, 
-        "calories": 10, 
-        "details": "جرعة قهوة مركزة ومستخلصة غنية بالكريمة الذهبية من أجوَد حبوب البن المحمصة", 
-        "in_stock": True, 
-        "ingredients": ["بن يمني محمص 100%"]
-    },
-    {
-        "id": 3, 
-        "category": "drinks", 
-        "name_ar": "سبانيش لاتيه بارد", 
-        "name_en": "iced spanish latte", 
-        "price": 1500, 
-        "calories": 280, 
-        "details": "مزيج منعش من قهوة الإسبريسو والحليب البارد مع الحليب المكثف المحلى وقطع الثلج", 
-        "in_stock": True, 
-        "ingredients": ["إسبريسو", "حليب بارد", "حليب مكثف", "ثلج"]
-    },
-
-    # 🍰 قسم الحلويات
-    {
-        "id": 4, 
-        "category": "sweets", 
-        "name_ar": "تشيز كيك توت", 
-        "name_en": "blueberry cheesecake", 
-        "price": 1800, 
-        "calories": 450, 
-        "details": "طبقة كريمة جبن غنية وناعمة على قاعدة بسكويت هش يعلوها صوص التوت الطبيعي", 
-        "in_stock": True, 
-        "ingredients": ["جبن كريمي", "بسكويت دايجستف", "صوص توت"]
-    },
-    {
-        "id": 5, 
-        "category": "sweets", 
-        "name_ar": "وافل بالشوكولاتة", 
-        "name_en": "nutella belgian waffle", 
-        "price": 1600, 
-        "calories": 520, 
-        "details": "وافل بلجيكي مقرمش من الخارج وهش من الداخل يقدم مع شوكولاتة نوتيلا وموز", 
-        "in_stock": False, 
-        "ingredients": ["عجين الوافل", "نوتيلا", "شرائح موز"]
-    },
-
-    # 🍔 قسم الوجبات السريعة
-    {
-        "id": 6, 
-        "category": "fast_food", 
-        "name_ar": "برجر دجاج كريسبي", 
-        "name_en": "crispy chicken burger", 
-        "price": 2200, 
-        "calories": 680, 
-        "details": "صدر دجاج مقرمش ذهبي مع جبنة شيدر سائبة وصوص الكافيه المميز في خبز بريوش", 
-        "in_stock": True, 
-        "ingredients": ["دجاج مقرمش", "خبز بريوش", "جبنة شيدر", "خس"]
-    },
-
-    # 🍕 قسم المأكولات
-    {
-        "id": 7, 
-        "category": "food", 
-        "name_ar": "بيتزا مارجريتا إيطالية", 
-        "name_en": "italian margarita pizza", 
-        "price": 2800, 
-        "calories": 720, 
-        "details": "عجينة إيطالية رقيقة مع صوص الطماطم الطازج وجبنة الموزاريلا الفاخرة وأوراق الريحان", 
-        "in_stock": True, 
-        "ingredients": ["عجينة بيتزا", "صلصة طماطم", "جبنة موزاريلا"]
-    },
-]
-
+from django.db.models import Q
+from products.models import Product
 
 def home(request):
-    # تحديد الثيم تلقائياً حسب الوقت (نهاري بين 6 صباحاً و 6 مساءً)
     current_hour = datetime.now().hour
     theme = "day" if 6 <= current_hour < 18 else "night"
+
+    # جلب مدخلات البحث إن وجدت
+    query = request.GET.get('q', '').strip()
+
+    # الاستعلام من قاعدة البيانات المحلية
+    if query:
+        db_products = Product.objects.filter(
+            Q(name_ar__icontains=query) |
+            Q(name_en__icontains=query) |
+            Q(details__icontains=query)
+        )
+    else:
+        db_products = Product.objects.all()
+
+    # تحويل كائنات المودل لشكل قاموس ليتوافق تماماً مع home.html
+    menu_items = []
+    for item in db_products:
+        menu_items.append({
+            "id": item.id,
+            "category": item.category.code,
+            "name_ar": item.name_ar,
+            "name_en": item.name_en,
+            "price": item.price,
+            "calories": item.calories,
+            "details": item.details,
+            "in_stock": item.in_stock,
+            "ingredients": item.get_ingredients_list()
+        })
 
     context = {
         "cafe_name": "roda cafe",
         "description": "welcome to roda cafe for best coffee in ibb",
-        "menu_items": MENU_DATA,
+        "menu_items": menu_items,
         "theme": theme,
+        "query": query,
     }
     return render(request, "pages/home.html", context)
 
@@ -108,18 +49,41 @@ def detail(request, item_id):
     current_hour = datetime.now().hour
     theme = "day" if 6 <= current_hour < 18 else "night"
 
-    # البحث عن الصنف المختار
-    selected_item = next((item for item in MENU_DATA if item["id"] == item_id), None)
-    
-    # جلب أصناف مشابهة من نفس القسم
-    related_items = [i for i in MENU_DATA if selected_item and i["category"] == selected_item["category"] and i["id"] != item_id]
+    # جلب المنتجات من قاعدة البيانات لتهيئة القالب
+    all_products = Product.objects.all()
+    all_items = []
+    selected_item = None
+
+    for item in all_products:
+        item_dict = {
+            "id": item.id,
+            "category": item.category.code,
+            "name_ar": item.name_ar,
+            "name_en": item.name_en,
+            "price": item.price,
+            "calories": item.calories,
+            "details": item.details,
+            "in_stock": item.in_stock,
+            "ingredients": item.get_ingredients_list()
+        }
+        all_items.append(item_dict)
+        if item.id == item_id:
+            selected_item = item_dict
+
+    # جلب المنتجات المقترحة من نفس الفئة
+    related_items = []
+    if selected_item:
+        related_items = [
+            i for i in all_items 
+            if i["category"] == selected_item["category"] and i["id"] != item_id
+        ]
 
     context = {
         "item": selected_item,
         "item_id": item_id,
         "related_items": related_items,
-        "all_items": MENU_DATA,      # لتشغيل فلتر length
-        "discount_code": None,        # لتشغيل فلتر default (لأنه فارغ None)
+        "all_items": all_items,
+        "discount_code": None,
         "theme": theme,
     }
     return render(request, "pages/detail.html", context)

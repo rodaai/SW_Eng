@@ -1,3 +1,4 @@
+{% load cafe_filters %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -25,6 +26,12 @@
         <!-- تطبيق الفلاتر: capfirst & upper -->
         <h1>☕ {{ cafe_name|upper }} ☕</h1>
         <p>{{ description|capfirst }}</p>
+
+        <!-- شريط البحث والفلترة -->
+<form action="{% url 'pages:home' %}" method="get" style="margin-top: 15px; display: flex; justify-content: center; gap: 8px;">
+    <input type="text" name="q" value="{{ query|default:'' }}" placeholder="ابحث عن منتج (مثلاً: قهوة)..." style="padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; width: 250px;">
+    <button type="submit" class="btn" style="padding: 8px 15px;">بحث 🔍</button>
+</form>
 
         <!-- شرط إظهار نوع الثيم الحالي -->
         <p style="margin-top: 10px; font-size: 14px;">
